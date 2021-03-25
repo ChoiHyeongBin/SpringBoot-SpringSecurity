@@ -1,6 +1,8 @@
 package com.chb.security1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +65,18 @@ public class IndexController {
 		userRepository.save(user);		// 회원가입이 잘 됨. but, 비밀번호 : 1234 => 시큐리티로 로그인을 할 수 없음. 이유는 패스워드가 암호화가 안되었기 때문
 			
 		return "redirect:/loginForm";			// 함수 재사용이 가능, Model 데이터를 가지고 올 수 있다
+	}
+	
+	@Secured("ROLE_ADMIN")		// 하나를 걸때 사용
+	@GetMapping("/info")
+	public @ResponseBody String info() {
+		return "개인정보";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+	@GetMapping("/data")
+	public @ResponseBody String data() {
+		return "데이터정보";
 	}
 	
 }

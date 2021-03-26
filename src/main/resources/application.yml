@@ -39,4 +39,3 @@ spring:
             scope:
             - email
             - profile
-# ignore test

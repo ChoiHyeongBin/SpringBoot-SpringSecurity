@@ -1,6 +1,5 @@
 package com.chb.security1.model;
 
-
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
@@ -10,6 +9,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
@@ -27,4 +27,17 @@ public class User {
 	private String providerId;
 	@CreationTimestamp		// 자동으로 만들어줌
 	private Timestamp createDate;
+	
+	@Builder
+	public User(String username, String password, String email, String role, String provider, String providerId,
+			Timestamp createDate) {
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.role = role;
+		this.provider = provider;
+		this.providerId = providerId;
+		this.createDate = createDate;
+	}
+
 }

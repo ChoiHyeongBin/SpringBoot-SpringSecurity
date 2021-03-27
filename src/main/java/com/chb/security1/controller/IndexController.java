@@ -3,12 +3,16 @@ package com.chb.security1.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chb.security1.config.auth.PrincipalDetails;
 import com.chb.security1.model.User;
 import com.chb.security1.repository.UserRepository;
 
@@ -20,6 +24,30 @@ public class IndexController {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@GetMapping("/test/login")
+	public @ResponseBody String testLogin(
+			Authentication authentication, 
+			@AuthenticationPrincipal PrincipalDetails userDetails) {		// DI (의존성 주입), @AuthenticationPrincipal -> session 정보에 접근할 수 있는 어노테이션
+		System.out.println("/test/login ==================");
+		PrincipalDetails principalDetatils = (PrincipalDetails) authentication.getPrincipal();
+		System.out.println("IndexController authentication : " + principalDetatils.getUser());
+		
+		System.out.println("IndexController userDetatils : " + userDetails.getUser());		
+		return "세선 정보 확인하기";
+	}
+	
+	@GetMapping("/test/oauth/login")
+	public @ResponseBody String testOAuthLogin(
+			Authentication authentication,
+			@AuthenticationPrincipal OAuth2User oauth) {		// DI (의존성 주입), @AuthenticationPrincipal -> session 정보에 접근할 수 있는 어노테이션
+		System.out.println("/test/oauth/login ==================");
+		OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();		// OAuth2User 로 다운캐스팅
+		System.out.println("IndexController authentication : " + oauth2User.getAttributes());		// 동일한 결과 (1번째 방법)
+		System.out.println("IndexController oauth2User : " + oauth.getAttributes());						// 동일한 결과 (2번째 방법)
+
+		return "OAuth 세선 정보 확인하기";
+	}
 
 	@GetMapping({"", "/"})	// 공백과 / 를 주소로 받음
 	public String index() {

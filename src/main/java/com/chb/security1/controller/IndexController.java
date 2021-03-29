@@ -56,8 +56,11 @@ public class IndexController {
 		return "index";	// src/main/resources/templates/index.mustache
 	}
 	
+	// OAuth 로그인을 해도 PrincipalDetails,
+	// 일반 로그인을 해도 PrincipalDetails 타입으로 받을 수 있음
 	@GetMapping("/user")
-	public @ResponseBody String user() {
+	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+		System.out.println("IndexController principalDetails : " + principalDetails.getUser());
 		return "user";
 	}
 	

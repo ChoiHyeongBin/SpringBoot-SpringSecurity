@@ -11,9 +11,11 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data		// Getter, Setter 생성
+@NoArgsConstructor		// default Constructor (파라미터가 없는 기본 생성자를 생성)
 public class User {
 	@Id		// primary key
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
